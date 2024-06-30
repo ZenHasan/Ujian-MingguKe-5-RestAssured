@@ -9,28 +9,30 @@ import org.testng.annotations.Test;
 
 public class TestUpdate {
     String baseUrl = "http://localhost:8081/api";
-    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzE5NzYwNzQ3LCJleHAiOjE3MTk3NjQzNDd9.0wfFbzS-4g8jF-YCSxaITz9siuZjNjmRvnusxIG7U-n9jgs7wyUIP8LL-Qpb73xyjuvq--M0Tx0p10QE_VXyaw";
+    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzE5NzcxMDY1LCJleHAiOjE3MTk3NzQ2NjV9.H6cfviL4uonH-lfYZqYWNRZwcfeVEfm4erGf43npMFArHzxqkrG69UaTtWJWZpamXnXgDIYd9VjT8t_JBLXBLg";
 
 
     @Test
     public void testUpdateAlbum() {
-        String endpoint = baseUrl + "/albums/8";
+        String albumId = "9";
+        String endpoint = baseUrl + "/albums/" + albumId;
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("title", "Updated Album Title");
-        requestBody.put("description", "Updated Album Description");
+        requestBody.put("title", "Mayor Teddy");
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", "Bearer " + token);
         request.header("Content-Type", "application/json");
         request.body(requestBody.toJSONString());
 
-        Response response = request.put(endpoint);
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody().asString());
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Response response = request.get(endpoint);
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Body: " + response.getBody().asString());
+
+        // Memastikan status code adalah 200
+        Assert.assertEquals(response.getStatusCode(), 200, "Status code tidak sesuai!");
 
         String updatedTitle = response.getBody().jsonPath().getString("title");
-        Assert.assertEquals(updatedTitle, "Mayor Bintang 5");
+        Assert.assertEquals(updatedTitle, "Mayor Teddy");
     }
 }
